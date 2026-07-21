@@ -14,6 +14,8 @@ This project publishes a small, auditable `did:web` identity through GitHub Page
 
 Because the DID contains the path segment `edgedm-did`, its document is served from `/edgedm-did/did.json`. This project does not publish or advertise a root `/.well-known/did.json` document.
 
+For compatibility testing, Pages also exposes an exact copy at `https://mreyese.github.io/edgedm-did/.well-known/did.json`. This nested copy is not the canonical resolution URL for the path-based DID and does not represent `did:web:mreyese.github.io` or `did:web:edgedm.eu`.
+
 ## Repository structure
 
 - `site/` — the complete static Pages artifact and public identity documents.

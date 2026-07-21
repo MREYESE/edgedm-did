@@ -1,0 +1,25 @@
+{
+  "@context": [
+    "https://www.w3.org/ns/did/v1",
+    "https://w3id.org/security/suites/jws-2020/v1"
+  ],
+  "id": "did:web:mreyese.github.io:edgedm-did",
+  "verificationMethod": [
+    {
+      "id": "did:web:mreyese.github.io:edgedm-did#key-1",
+      "type": "JsonWebKey2020",
+      "controller": "did:web:mreyese.github.io:edgedm-did",
+      "publicKeyJwk": {
+        "kty": "OKP",
+        "crv": "Ed25519",
+        "x": "XL6SiTMNfNu6_r5ZxnNAyxcrNki5WBuVv_O4GimX9xY"
+      }
+    }
+  ],
+  "authentication": [
+    "did:web:mreyese.github.io:edgedm-did#key-1"
+  ],
+  "assertionMethod": [
+    "did:web:mreyese.github.io:edgedm-did#key-1"
+  ]
+}

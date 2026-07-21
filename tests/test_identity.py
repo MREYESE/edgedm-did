@@ -23,6 +23,7 @@ class IdentityValidationTests(unittest.TestCase):
         self.temporary = tempfile.TemporaryDirectory()
         self.site = Path(self.temporary.name) / "site"
         self.site.mkdir()
+        (self.site / ".well-known").mkdir()
         self.raw = bytes(range(32))
         self.document = self.valid_document()
         self.metadata = self.valid_metadata()
@@ -75,9 +76,14 @@ class IdentityValidationTests(unittest.TestCase):
         }
         for name, content in files.items():
             (self.site / name).write_text(content, encoding="utf-8")
+        (self.site / ".well-known" / "did.json").write_text(
+            files["did.json"], encoding="utf-8"
+        )
 
     def rewrite(self) -> None:
-        (self.site / "did.json").write_text(json.dumps(self.document) + "\n", encoding="utf-8")
+        did_text = json.dumps(self.document) + "\n"
+        (self.site / "did.json").write_text(did_text, encoding="utf-8")
+        (self.site / ".well-known" / "did.json").write_text(did_text, encoding="utf-8")
         (self.site / "identity-metadata.json").write_text(
             json.dumps(self.metadata) + "\n", encoding="utf-8"
         )
@@ -177,6 +183,17 @@ class IdentityValidationTests(unittest.TestCase):
     def test_missing_site_file(self) -> None:
         (self.site / "robots.txt").unlink()
         with self.assertRaisesRegex(ValidationError, "missing required site file"):
+            validate_site(self.site)
+
+    def test_missing_compatibility_copy(self) -> None:
+        (self.site / ".well-known" / "did.json").unlink()
+        with self.assertRaisesRegex(ValidationError, "missing required file"):
+            validate_site(self.site)
+
+    def test_compatibility_copy_must_match(self) -> None:
+        alias = self.site / ".well-known" / "did.json"
+        alias.write_text(alias.read_text(encoding="utf-8") + "\n", encoding="utf-8")
+        with self.assertRaisesRegex(ValidationError, "must exactly match"):
             validate_site(self.site)
 
 

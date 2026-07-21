@@ -19,6 +19,8 @@ DID = "did:web:mreyese.github.io:edgedm-did"
 VM_ID = f"{DID}#key-1"
 SITE_URL = "https://mreyese.github.io/edgedm-did/"
 DID_DOCUMENT_URL = f"{SITE_URL}did.json"
+COMPATIBILITY_DID_PATH = Path(".well-known/did.json")
+COMPATIBILITY_DID_URL = f"{SITE_URL}.well-known/did.json"
 DID_CONTEXT = "https://www.w3.org/ns/did/v1"
 REQUIRED_FILES = {
     ".nojekyll", "404.html", "app.js", "did.json", "identity-metadata.json",
@@ -145,6 +147,13 @@ def validate_site(site_dir: Path) -> None:
     require((site_dir / ".nojekyll").read_bytes() == b"", ".nojekyll must be empty")
     document = load_json(site_dir / "did.json")
     raw = validate_document(document)
+    compatibility_path = site_dir / COMPATIBILITY_DID_PATH
+    compatibility_document = load_json(compatibility_path)
+    validate_document(compatibility_document)
+    require(
+        compatibility_path.read_bytes() == (site_dir / "did.json").read_bytes(),
+        ".well-known/did.json must exactly match did.json",
+    )
     metadata = load_json(site_dir / "identity-metadata.json")
     validate_metadata(metadata, raw)
     index = (site_dir / "index.html").read_text(encoding="utf-8")
@@ -181,6 +190,17 @@ def validate_remote(site_dir: Path) -> None:
     validate_document(remote_document)
     local_did = (site_dir / "did.json").read_bytes()
     require(remote_did == local_did, "remote DID document does not exactly match the local document")
+    compatibility_did, final_compatibility_url, compatibility_headers, compatibility_status = fetch(
+        COMPATIBILITY_DID_URL
+    )
+    require(
+        final_compatibility_url == COMPATIBILITY_DID_URL,
+        f"unexpected final compatibility URL: {final_compatibility_url}",
+    )
+    require(
+        compatibility_did == remote_did,
+        "remote .well-known compatibility copy does not exactly match the canonical document",
+    )
     page, final_site_url, page_headers, page_status = fetch(SITE_URL)
     require(final_site_url == SITE_URL, f"unexpected final site URL: {final_site_url}")
     page_text = page.decode("utf-8")
@@ -188,6 +208,10 @@ def validate_remote(site_dir: Path) -> None:
     print(f"Remote DID URL: {final_did_url}; redirects: none")
     print(f"Remote DID: HTTP {did_status}; Content-Type: {did_headers.get('Content-Type', '(absent)')}")
     print(f"Remote DID CORS: {did_headers.get('Access-Control-Allow-Origin', '(absent)')}")
+    print(
+        f"Remote compatibility copy: HTTP {compatibility_status}; "
+        f"Content-Type: {compatibility_headers.get('Content-Type', '(absent)')}"
+    )
     print(f"Remote site URL: {final_site_url}; redirects: none")
     print(f"Remote page: HTTP {page_status}; Content-Type: {page_headers.get('Content-Type', '(absent)')}")
     print("Remote DID document exactly matches the committed local document.")

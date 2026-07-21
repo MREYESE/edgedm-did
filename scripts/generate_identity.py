@@ -20,6 +20,7 @@ DID = "did:web:mreyese.github.io:edgedm-did"
 VM_ID = f"{DID}#key-1"
 SITE_URL = "https://mreyese.github.io/edgedm-did/"
 DID_DOCUMENT_URL = f"{SITE_URL}did.json"
+COMPATIBILITY_DID_PATH = Path(".well-known/did.json")
 ED25519_SPKI_PREFIX = bytes.fromhex("302a300506032b6570032100")
 
 
@@ -199,15 +200,19 @@ def stable_json(value: dict[str, Any]) -> bytes:
 
 def check_committed(root: Path, raw: bytes) -> None:
     did_path = root / "site" / "did.json"
+    compatibility_path = root / "site" / COMPATIBILITY_DID_PATH
     metadata_path = root / "site" / "identity-metadata.json"
     expected_did, expected_metadata = documents(raw)
     try:
         actual_did = json.loads(did_path.read_text(encoding="utf-8"))
+        compatibility_did = json.loads(compatibility_path.read_text(encoding="utf-8"))
         actual_metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
     except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise IdentityError(f"Could not read committed public identity artifacts: {exc}") from exc
     if actual_did != expected_did:
         raise IdentityError("site/did.json does not match the external Ed25519 private key")
+    if compatibility_did != expected_did:
+        raise IdentityError("site/.well-known/did.json is not an exact logical copy of site/did.json")
     if actual_metadata != expected_metadata:
         raise IdentityError("site/identity-metadata.json does not match the external key and DID")
 
@@ -248,6 +253,11 @@ def main() -> int:
             write_public_pem(private_key, public_key)
             did_document, metadata = documents(raw)
             atomic_write(root / "site" / "did.json", stable_json(did_document), reject_private=True)
+            atomic_write(
+                root / "site" / COMPATIBILITY_DID_PATH,
+                stable_json(did_document),
+                reject_private=True,
+            )
             atomic_write(
                 root / "site" / "identity-metadata.json",
                 stable_json(metadata),
