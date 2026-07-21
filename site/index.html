@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Public test-only EDGE/DM did:web identity for dataspace interoperability testing.">
+  <meta name="robots" content="noindex, nofollow">
+  <title>EDGE/DM DID — Test identity</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="./" aria-label="EDGE/DM DID home">EDGE/DM <span>DID</span></a>
+    <span class="status"><span aria-hidden="true"></span>Test identity</span>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <p class="eyebrow">Public identity record / did:web</p>
+      <h1 id="page-title">A verifiable test identity,<br>published in the open.</h1>
+      <p class="lede">This is a public test identity for dataspace interoperability testing. It is not a production credential, governance approval, connector onboarding record or legal identity.</p>
+    </section>
+
+    <section class="identity" aria-labelledby="identity-title">
+      <div class="section-heading">
+        <p class="index">01</p>
+        <h2 id="identity-title">Identity details</h2>
+      </div>
+      <dl>
+        <div class="field">
+          <dt>DID</dt>
+          <dd><code id="did-value">did:web:mreyese.github.io:edgedm-did</code><button class="copy" type="button" data-copy="did-value" aria-label="Copy DID">Copy</button></dd>
+        </div>
+        <div class="field">
+          <dt>DID document</dt>
+          <dd><a id="document-value" href="did.json">https://mreyese.github.io/edgedm-did/did.json</a><button class="copy" type="button" data-copy="document-value" aria-label="Copy DID document URL">Copy</button></dd>
+        </div>
+        <div class="field">
+          <dt>Verification method</dt>
+          <dd><code id="method-value">did:web:mreyese.github.io:edgedm-did#key-1</code><button class="copy" type="button" data-copy="method-value" aria-label="Copy verification method ID">Copy</button></dd>
+        </div>
+        <div class="field split">
+          <div><dt>Key type</dt><dd>Ed25519 / JsonWebKey2020</dd></div>
+          <div><dt>Environment</dt><dd>Test / active for testing</dd></div>
+        </div>
+        <div class="field">
+          <dt>Public-key SHA-256 fingerprint</dt>
+          <dd><code id="fingerprint-value">sha256:0917373f24ab5cc0b452262a817dc07dee2b47bdae0cd46c603cd4cfe3d04df1</code><button class="copy" type="button" data-copy="fingerprint-value" aria-label="Copy public-key fingerprint">Copy</button></dd>
+        </div>
+      </dl>
+      <p class="actions"><a class="primary" href="did.json">View raw did.json</a><a href="https://github.com/MREYESE/edgedm-did">Source repository</a></p>
+    </section>
+
+    <section class="notes" aria-label="Technical and security notes">
+      <article>
+        <p class="index">02</p>
+        <h2>Resolution</h2>
+        <p>Path-based <code>did:web</code> resolution converts the host and path segments in the DID into HTTPS. Here, <code>mreyese.github.io:edgedm-did</code> resolves to this repository’s <a href="did.json">/edgedm-did/did.json</a> file—not a root <code>/.well-known/</code> document.</p>
+      </article>
+      <article>
+        <p class="index">03</p>
+        <h2>Security boundary</h2>
+        <p>The repository publishes only an Ed25519 public JWK. Its test private key is generated and retained outside Git, is not used by GitHub Actions, and must never be used for production or regulated trust decisions.</p>
+      </article>
+      <article>
+        <p class="index">04</p>
+        <h2>Limitations</h2>
+        <p>This identity is test-only, non-production, not governance-approved, not connector-onboarded, and not legally verified. It publishes no service endpoint and makes no claim of universal resolver compatibility.</p>
+      </article>
+    </section>
+
+    <section class="validation" aria-labelledby="validation-title">
+      <div><p class="index">05</p><h2 id="validation-title">Validation status</h2></div>
+      <p><strong>Repository-controlled checks</strong><br>Structure, key encoding, relationship references, fingerprint consistency, public-file safety, and unit tests run before deployment.</p>
+      <p><strong>Deployment</strong><br>GitHub Pages publishes the validated static <code>site/</code> artifact from the default branch.</p>
+    </section>
+  </main>
+
+  <footer><span>EDGE/DM DID</span><span>Public test identity</span></footer>
+</body>
+</html>

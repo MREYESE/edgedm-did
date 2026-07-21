@@ -1,0 +1,66 @@
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "site/**"
+      - "scripts/**"
+      - "tests/**"
+      - ".github/workflows/deploy-pages.yml"
+      - "Makefile"
+  workflow_dispatch:
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+      - name: Validate public identity
+        run: python3 scripts/validate_identity.py --site-dir site
+      - name: Run unit tests
+        run: python3 -m unittest discover -s tests -v
+      - name: Scan tracked files for private-key markers
+        run: |
+          if git grep -nE -- '-----BEGIN (RSA |EC |OPENSSH |)?PRIVATE KEY-----'; then
+            echo "Private-key PEM marker detected in tracked files" >&2
+            exit 1
+          fi
+      - name: Reject private JWK parameters in the site
+        run: |
+          if grep -RInE '"d"[[:space:]]*:' site; then
+            echo "Private JWK parameter detected in deployable files" >&2
+            exit 1
+          fi
+
+  deploy:
+    needs: validate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+      - name: Deploy Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
