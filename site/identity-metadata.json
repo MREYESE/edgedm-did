@@ -1,0 +1,14 @@
+{
+  "did": "did:web:mreyese.github.io:edgedm-did",
+  "didDocumentUrl": "https://mreyese.github.io/edgedm-did/did.json",
+  "siteUrl": "https://mreyese.github.io/edgedm-did/",
+  "verificationMethod": "did:web:mreyese.github.io:edgedm-did#key-1",
+  "keyType": "Ed25519",
+  "verificationMethodType": "JsonWebKey2020",
+  "publicKeyFingerprintSha256": "sha256:0917373f24ab5cc0b452262a817dc07dee2b47bdae0cd46c603cd4cfe3d04df1",
+  "environment": "test",
+  "status": "active-for-testing",
+  "productionApproved": false,
+  "governanceApproved": false,
+  "connectorOnboarded": false
+}

@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+      - name: Report tool versions
+        run: |
+          python3 --version
+          openssl version
+      - name: Validate public identity
+        run: python3 scripts/validate_identity.py --site-dir site
+      - name: Run unit tests
+        run: python3 -m unittest discover -s tests -v
+      - name: Scan tracked files for private-key markers
+        run: |
+          if git grep -nE -- '-----BEGIN (RSA |EC |OPENSSH |)?PRIVATE KEY-----'; then
+            echo "Private-key PEM marker detected in tracked files" >&2
+            exit 1
+          fi
+      - name: Reject private JWK parameters in the site
+        run: |
+          if grep -RInE '"d"[[:space:]]*:' site; then
+            echo "Private JWK parameter detected in deployable files" >&2
+            exit 1
+          fi

@@ -1,0 +1,66 @@
+:root {
+  color-scheme: light;
+  --ink: #15201d;
+  --muted: #5f6b67;
+  --line: #d6deda;
+  --paper: #f5f7f4;
+  --accent: #0b6549;
+  --accent-light: #dff2e9;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { background: var(--paper); color: var(--ink); }
+body { margin: 0; min-height: 100vh; }
+a { color: var(--accent); text-underline-offset: .2em; }
+a:hover { text-decoration-thickness: 2px; }
+a:focus-visible, button:focus-visible { outline: 3px solid #e6a817; outline-offset: 3px; }
+code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: .9em; overflow-wrap: anywhere; }
+
+.site-header, main, footer { width: min(1120px, calc(100% - 40px)); margin-inline: auto; }
+.site-header { display: flex; justify-content: space-between; align-items: center; padding: 28px 0; border-bottom: 1px solid var(--line); }
+.wordmark { color: var(--ink); font-weight: 750; letter-spacing: -.03em; text-decoration: none; }
+.wordmark span { color: var(--accent); }
+.status { display: inline-flex; gap: 8px; align-items: center; padding: 7px 11px; border: 1px solid #9acdb9; background: var(--accent-light); font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+.status span { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+
+.intro { padding: clamp(72px, 12vw, 150px) 0 90px; max-width: 950px; }
+.eyebrow, .index { color: var(--accent); font-size: .75rem; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; }
+h1 { margin: 20px 0 28px; max-width: 900px; font-size: clamp(2.7rem, 7vw, 6.2rem); line-height: .98; letter-spacing: -.06em; font-weight: 650; }
+.lede { max-width: 760px; margin: 0; color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.35rem); line-height: 1.65; }
+
+.identity { border-top: 2px solid var(--ink); }
+.section-heading { display: grid; grid-template-columns: 80px 1fr; align-items: baseline; padding: 24px 0 18px; }
+h2 { margin: 0; font-size: 1.5rem; letter-spacing: -.025em; }
+dl { margin: 0; border-top: 1px solid var(--line); }
+.field { display: grid; grid-template-columns: minmax(170px, 1fr) 3fr; gap: 24px; padding: 22px 0; border-bottom: 1px solid var(--line); }
+dt { color: var(--muted); font-size: .8rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+dd { margin: 0; min-width: 0; display: flex; justify-content: space-between; gap: 16px; align-items: start; }
+.split > div { display: grid; grid-template-columns: minmax(170px, 1fr) 2fr; gap: 24px; }
+.copy { border: 0; background: transparent; color: var(--accent); padding: 2px 0; cursor: pointer; font: inherit; font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+.actions { display: flex; gap: 25px; align-items: center; margin: 32px 0 80px; }
+.primary { display: inline-block; padding: 12px 17px; background: var(--ink); color: white; text-decoration: none; }
+
+.notes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.notes article { background: var(--paper); padding: 30px; }
+.notes h2 { margin: 20px 0 14px; }
+.notes p:last-child, .validation p { color: var(--muted); line-height: 1.65; }
+.validation { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 50px; margin: 90px 0; padding-top: 24px; border-top: 2px solid var(--ink); }
+.validation h2 { margin-top: 18px; }
+.validation p { margin: 0; }
+.validation strong { color: var(--ink); }
+footer { display: flex; justify-content: space-between; padding: 26px 0 40px; border-top: 1px solid var(--line); color: var(--muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; }
+
+@media (max-width: 760px) {
+  .field, .section-heading, .validation { grid-template-columns: 1fr; }
+  .section-heading { gap: 8px; }
+  .field { gap: 10px; }
+  .split > div { grid-template-columns: 1fr; gap: 7px; }
+  .notes { grid-template-columns: 1fr; }
+  .validation { gap: 30px; }
+  dd { align-items: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+}

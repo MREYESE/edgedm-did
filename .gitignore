@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+.env
+.env.*
+*.pem
+*.key
+*.p8
+*.p12
+*.pfx
+*.jwk.private.json
+private/
+keys/
+.codex-runs/
+.DS_Store
