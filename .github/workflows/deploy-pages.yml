@@ -57,10 +57,23 @@ jobs:
         uses: actions/checkout@v6
       - name: Configure Pages
         uses: actions/configure-pages@v5
+      - name: Package Pages artifact including well-known files
+        run: |
+          tar \
+            --dereference \
+            --hard-dereference \
+            --directory site \
+            -cvf "${{ runner.temp }}/artifact.tar" \
+            --exclude=.git \
+            --exclude=.github \
+            .
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-artifact@v4
         with:
-          path: site
+          name: github-pages
+          path: ${{ runner.temp }}/artifact.tar
+          retention-days: 1
+          if-no-files-found: error
       - name: Deploy Pages
         id: deployment
         uses: actions/deploy-pages@v4
