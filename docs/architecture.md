@@ -25,3 +25,9 @@ https://mreyese.github.io/edgedm-did/did.json
 Under the `did:web` method, the first method-specific segment is the host and subsequent colon-delimited segments become URL path segments. Consequently, `edgedm-did` is part of the URL path. The root-host form using `/.well-known/did.json` applies only when a DID has no path segment and is intentionally not used here.
 
 The DID document exposes one `JsonWebKey2020` Ed25519 verification method for authentication and assertions. It exposes no service endpoint, key-agreement method, timestamp, or deployment metadata. Operational metadata lives separately in `identity-metadata.json`.
+
+## Compatibility copy
+
+The Pages artifact also contains `.well-known/did.json` beneath the project path, producing `https://mreyese.github.io/edgedm-did/.well-known/did.json`. Generation and validation enforce byte-for-byte equality with the canonical `site/did.json` document.
+
+This nested path is a compatibility copy only. The `did:web:mreyese.github.io:edgedm-did` resolution URL remains `https://mreyese.github.io/edgedm-did/did.json`; the copy does not establish a root-domain DID.
